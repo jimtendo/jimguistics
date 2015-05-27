@@ -1,0 +1,8 @@
+{
+    "name": "jimtendo/jimguistics",
+    "autoload": {
+        "psr-0" : {
+            "Jimtendo\\Jimguistics" : "src"
+        }
+    }
+}
