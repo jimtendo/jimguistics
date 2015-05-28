@@ -12229,7 +12229,6 @@ Fireside\/Simon NNP
 Firestone NNP NN
 Firm NN JJ NNP
 Firms NNS NNPS NNP
-First NNP NNPS JJ LS RB
 First-Born NNP
 First-half JJ
 First-hand JJ
@@ -55756,6 +55755,7 @@ firmly RB
 firmness NN
 firms NNS VBZ
 firmwide RB
+first IN RB RP
 first-aid NN
 first-amendment JJ
 first-base JJ

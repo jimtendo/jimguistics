@@ -5,11 +5,14 @@ namespace Jimtendo\Jimguistics;
 class PosTagger {
         private $dict; 
         
-        public function __construct($lexicon = __DIR__ . '/data/en_lexicon.txt') {
+        public function __construct($lexicon = NULL) {
+        
+                if (!$lexicon) $lexicon = __DIR__ . '/data/en_lexicon.txt';
+        
                 $fh = fopen($lexicon, 'r');
                 while($line = fgets($fh)) {
                         $tags = explode(' ', $line);
-                        $this->dict[strtolower(array_shift($tags))] = $tags;
+                        $this->dict[array_shift($tags)] = $tags;
                 }
                 fclose($fh);
         }
@@ -22,7 +25,12 @@ class PosTagger {
                 $i = 0;
                 foreach($matches[0] as $token) {
                         // default to a common noun
-                        $return[$i] = array('token' => $token, 'tag' => 'NN');  
+                        $return[$i] = array('token' => $token, 'tag' => 'NN');
+                        
+                        // if the first letter is uppercase, default to propernoun
+                        if (ctype_upper(substr($token, 0, 1))) {
+                            $return[$i] = array('token' => $token, 'tag' => 'NNP');  
+                        }
                         
                         // remove trailing full stops
                         if(substr($token, -1) == '.') {
@@ -30,9 +38,11 @@ class PosTagger {
                         }
                         
                         // get from dict if set
-                        if(isset($this->dict[strtolower($token)])) {
-                                $return[$i]['tag'] = $this->dict[strtolower($token)][0];
-                        }       
+                        if(isset($this->dict[$token])) {
+                            $return[$i]['tag'] = $this->dict[$token][0];
+                        } else if ($i == 0 && isset($this->dict[strtolower($token)])) {
+                            $return[$i]['tag'] = $this->dict[strtolower($token)][0];
+                        }
                         
                         // Converts verbs after 'the' to nouns
                         if($i > 0) {
